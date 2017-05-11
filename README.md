@@ -1,2 +1,2 @@
 # regex
-practice/document syntax and patterns eventually build toward a password generator
+practice/document syntax and patterns. Plan is to build toward a password generator.
