@@ -12,9 +12,9 @@ __Notes/Highlights:__
 1. If pattern does not match, it'll return a null.
 2. metacharacters:
    * x|y Pipe matches x OR y. 
-   * \* Matches the preceding subexpression zero or more times.
+   * . Matches the preceding subexpression zero or more times.
    * [xyz] A 'set' or 'character set'. Matches any one of the enclosed characters or 'range' in a set - [a-z] is same as [abcdefgh...z]
-     * ** can combine ranges in sets and ranges with individual characters in sets. **
+     * can combine ranges in sets and ranges with individual characters in sets.
    * [^xyz] A carat within a set matches the opposite of the enclosed range (if a-z, will match on anything except lowercase letters).
    * {} is known as a quantifier - which is used to look for consecutive matches of any length. 
      * {1,20} - 1 letter up to 20 times.
