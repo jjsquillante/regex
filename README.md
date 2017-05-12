@@ -7,32 +7,79 @@
   ```
    var regex = / *Pattern goes here* / *flags goes here*;
    var regex = new RegExp(/*pattern*/,*flags*); 
-
   ```
-__Notes:__ 
-1. If pattern does not match, it'll return a null. 
-2. Accepted flags/options: 
+__Notes/Highlights:__ 
+1. If pattern does not match, it'll return a null.
+2. metacharacters:
+   * x|y Pipe matches x OR y. 
+   * \* Matches the preceding subexpression zero or more times.
+   * [xyz] A 'set' or 'character set'. Matches any one of the enclosed characters or 'range' in a set - [a-z] is same as [abcdefgh...z]
+     * ** can combine ranges in sets and ranges with individual characters in sets. **
+   * [^xyz] A carat within a set matches the opposite of the enclosed range (if a-z, will match on anything except lowercase letters).
+   * {} is known as a quantifier - which is used to look for consecutive matches of any length. 
+     * {1,20} - 1 letter up to 20 times.
+     * {1,} - matches 1 or more ad infinitum... (shortcut is known as +)
+   * x+ or []+ matches the preceding item 1 or more times. (same as {1,})
+3. Accepted flags/options: 
    * g (global - find all matches rather than just stopping at the first.)
    * i (ignore case)
    * m (multiline; match the beginning or end of each line)
    * u (unicode; treat pattern as a sequence of unicode code points)
    * y (sticky; matches only from the index indicated by the lastIndex property of this regular expression in the target string (and does      not attempt to match from any later indexes)).
-3. Relevant methods:
+4. Relevant methods:
    * .match()
    * .replace()
+   * .split()
+   * .search()
 
 
-### Examples:
+### Exercise: Grading Passwords 
+1. #### Get number of total characters (any kind)
 ```
-1. 'g'.match(/g/);
+1. 'g'.match(/g/); // will match 'g' with a length of 1.
 2. 'g'.match(/r/); // null
-3. 'gg'.match(/g/); // only will match on first occurrence.
+3. 'gg'.match(/g/); // will only match on first occurrence, length of 1.
 4. 'gg'.match(/g/g); // will match all results of 'g'. (ie. 'gggg' - will match 4 individual g's with a length of 4.)
-5. 'ag'.match(/g/g); // expect 1 g
-6. 'ag'.match(/a|g/g);//match 'a' OR 'g' - without pipe, will match specific pattern of 'ag' (a followed by g).
+5. 'ag'.match(/g/g); // expect 1 g, length of 1
+6. 'ag'.match(/a|g/g);//match 'a' OR 'g' - without pipe, will match specific pattern of 'ag' (a followed by g) - length of 2.
 7. 'abcdefg'.match(/a|b|c|d|e|f|g/g); // will return a length of 7 (a,b,c,d,e,f,g)
 
-// Above examples can be substituted with a metacharacter:
-
+// above examples can be substituted with a metacharacter and will fulfill our goal:
 1. 'abcdefg'.match(/./g); // will return a length of 7 (a,b,c,d,e,f,g)
+
+// confirm all characters, case insensitive, numbers and special characters work.
+2. 'abcdefgABC123#% '.match(/./g); // will match on ALL characters and return a length of 16
+```
+2. #### Get number of lowercase letters
+```
+// count number of lowercase characters using a 'set'.
+// a-z is range in set []
+'abCD12%&'.match(/[a-z]/g); // expect a,b
+```
+3. #### Get number of uppercase letters
+```
+// A-Z is range in set []
+'abAB'.match(/[A-Z]/g); // expect only uppercase letters A,B
+```
+4. #### Get number of digits
+```
+// 0-9 is range in set [] (can combine ranges in sets and ranges with individual characters in sets.)
+'1abA3b1'.match(/[0-9]/g); // expect only digits to be returned - [1,3,1]
+```
+5. #### Get number of special characters (anything not a letter or digit)
+```
+// we want to match anything that is NOT a lowercase/uppercase letter or digit in the set.
+// ''.match(/[a-zA-Z0-9]/g); -- would match all lowercase/uppercase letters or digits.
+
+// we would want the OPPOSITE.
+'aA1!@#$%^&*()-'.match(/[^a-zA-Z0-9]/g); // a carat within a set says get the opposite. - expect !@#$%^&*()- in set
+```
+6. #### Get a series of consecutive letters. 
+```
+// current solution will only match single characters.
+'DONT!be*a^framework-chaser'.match(/[a-zA-Z]/g); 
+
+// we want to match consecutive characters, so we need to use quantifiers.
+'DONT!be*a^framework-chaser'.match(/[a-zA-Z]+/g); // can also add case insensitive flag (i) ie. .match(/[a-z]+/gi)
+
 ```
