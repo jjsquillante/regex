@@ -115,3 +115,30 @@ __Notes/Highlights:__
 var num = '343-555-9999'.replace(/[\d]{3}-[\d]{3}-([\d]{4})/g, 'XXX-XXX-$1'); // "XXX-XXX-9999"
 
 ```
+
+### Exercise 3: Formatting Names
+*Transform a name like 'Squillante, James' to 'James Squillante'*
+1. #### Match each name individually.
+```
+// letter from a-z and match unlimited amount of times + case insensitive.
+'Squillante, James'.match(/[a-z]+/gi) // match: ["Squillante", "James"] // length: 2
+```
+2. #### Match the comma and space.
+```
+// match the comma and space to get the first part of the Name pattern. (last name)
+'Squillante, James'.match(/[a-z]+, /gi) // match: ["Squillante, "] // length: 1
+
+```
+3. #### Match the second part of the pattern - first name.
+```
+// wrap both sets in parenthesis to capture groups. 
+// make sure to leave ', ' out of the captures so we only capture last and first name.
+'Squillante, James'.match(/([a-z]+), ([a-z]+)/gi) // match: ["Squillante, James"] // length: 1
+```
+4. #### Leverage the capture groups to re-format Name.
+```
+// capture groups are based on number of captured groups (parenthesis) from left to right. (first capture - $1, second - $2...)
+'Squillante, James'.replace(/([a-z]+), ([a-z]+)/gi, '$2 $1') // James Squillante
+```
+
+
