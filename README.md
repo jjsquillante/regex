@@ -17,9 +17,13 @@ __Notes/Highlights:__
      * can combine ranges in sets and ranges with individual characters in sets.
    * [^xyz] A carat within a set matches the opposite of the enclosed range (if a-z, will match on anything except lowercase letters).
    * {} is known as a quantifier - which is used to look for consecutive matches of any length. 
+     * {min, max}
      * {1,20} - 1 letter up to 20 times.
      * {1,} - matches 1 or more ad infinitum... (shortcut is known as +)
+     * {n} - matches 'n' consecutive digits (i.e [0-9]{3} matches '123' in '12345')
    * x+ or []+ matches the preceding item 1 or more times. (same as {1,})
+   * \d is a shortcut for digits ([0-9]) that makes the expression a little shorter.
+   * $& - references the whole matched string.
 3. Accepted flags/options: 
    * g (global - find all matches rather than just stopping at the first.)
    * i (ignore case)
@@ -28,12 +32,12 @@ __Notes/Highlights:__
    * y (sticky; matches only from the index indicated by the lastIndex property of this regular expression in the target string (and does      not attempt to match from any later indexes)).
 4. Relevant methods:
    * .match()
-   * .replace()
+   * .replace() - will look for the pattern and will replace with the value passed as the second argument.
    * .split()
    * .search()
 
 
-### Exercise: Grading Passwords 
+### Exercise 1: Grading Passwords 
 1. #### Get number of total characters (any kind)
 ```
 1. 'g'.match(/g/); // will match 'g' with a length of 1.
@@ -81,5 +85,33 @@ __Notes/Highlights:__
 
 // we want to match consecutive characters, so we need to use quantifiers.
 'DONT!be*a^framework-chaser'.match(/[a-zA-Z]+/g); // can also add case insensitive flag (i) ie. .match(/[a-z]+/gi)
+
+```
+
+### Exercise 2: Phone Number Obfuscator
+*Transform a number like '555-666-7777' to 'XXX-XXX-7777'*
+1. #### Find all numbers in the range [0-9]
+```
+'343-555-9999'.match(/[0-9]/g) // matches: ["3", "4", "3", "5", "5", "5", "9", "9", "9", "9"]
+```
+2. #### Use a quantifier to match 3 consecutive digits and hyphen at end of each set.
+```
+'343-555-9999'.match(/[0-9{3}-]/g) // matches: ["343-", "555-"]
+```
+3. #### Use a quantifier to match 4 consecutive digits.
+```
+'343-555-9999'.match(/[0-9{3}-[0-9]{3}-[0-9]{4}/g) // ["343-555-9999"]
+```
+4. #### Capture the 4 consecutive digits
+```
+// to capture a group - add parenthesis around the set.
+// reference to the set is with $n - n being numerically sequential (1,2,3)
+'343-555-9999'.match(/[0-9{3}-[0-9]{3}-([0-9]{4})/g) // ["343-555-9999"]
+```
+5. #### Replace the first 6 digits with 'XXX-XXX-'
+```
+// \d - shorthand for digits. (works the same as [0-9])
+// $1 captures the first group in the regular expression wrapped in parenthesis.
+var num = '343-555-9999'.replace(/[\d]{3}-[\d]{3}-([\d]{4})/g, 'XXX-XXX-$1'); // "XXX-XXX-9999"
 
 ```
