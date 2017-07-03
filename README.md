@@ -5,14 +5,15 @@
  1. A concise way to look for patterns in strings.
  2. Creating a regular expression:  
   ```
-   var regex = / *Pattern goes here* / *flags goes here*;
+   var regex = / *Pattern goes here* / *flags go here*;
    var regex = new RegExp(/*pattern*/,*flags*); 
   ```
 __Notes/Highlights:__ 
 1. If pattern does not match, it'll return a null.
 2. metacharacters:
    * x|y Pipe matches x OR y. 
-   * . Matches the preceding subexpression zero or more times.
+   * . Matches any single character, except new line characters.
+   * \* Matches preceding expression/character zero or more times. 
    * [xyz] A 'set' or 'character set'. Matches any one of the enclosed characters or 'range' in a set - [a-z] is same as [abcdefgh...z]
      * can combine ranges in sets and ranges with individual characters in sets.
    * [^xyz] A carat within a set matches the opposite of the enclosed range (if a-z, will match on anything except lowercase letters).
@@ -141,4 +142,58 @@ var num = '343-555-9999'.replace(/[\d]{3}-[\d]{3}-([\d]{4})/g, 'XXX-XXX-$1'); //
 'Squillante, James'.replace(/([a-z]+), ([a-z]+)/gi, '$2 $1') // James Squillante
 ```
 
+### Exercise 4: Positive Lookahead - Match every `w` except the last.
+1. #### Match `w` only if what follows next is equal to `w`.
+```
+// matches the main expression (w) - only if the next character also matches the pattern.
+// will return the `w` - but will not include the result of what is captured within the (?=)
+// /w(?=w)/
 
+Example: Match `w` if it is followed by `h`
+
+/w(?=h)/g 
+
+// will match on 'why' and 'where'and will return the 'w' for each. 
+
+wwww.match(/w(?=h)/g) // null
+woot.match(/w(?=h)/g) // null
+why.match(/w(?=h)/g) // ['w']
+where.match(/w(?=h)/g) // ['w']
+
+```
+2. #### Match every `w` except last, even if there are characters in between.
+```
+Example: 
+// positive lookahead to match a `w` that is followed by any character (any length/ 0 or more) and ends with a `w`.
+'wow'.match(/w(?=.{0,}w/g) // ['w']  (length: 1) 
+// shorthand
+'wow'.match(/w(?=.*w/g) // ['w']  (length: 1)
+
+```
+### Exercise 5: Negative Lookahead - Match the last `w`.
+
+```
+// match w if what follows is not this pattern. (ie. since the last `w` does not have anything after, it matches).
+'wow'.match(/w(?!.*w)/) // ['w'] last `w`
+
+Example: Match grey if it is not followed by ` hound` (must account for space between words)
+'grey hound'.match(/grey(?! hound)/g) // null
+'grey dog'.match(/grey(?! hound)/g) // ['grey']
+
+```
+### Exercise 6: Find last instance of every character in string.
+```
+// use a capture group and reference within regular expression.
+// in order to reference the capture group within a regexp, we'll use '\1'  
+
+'aaww'.match(/(w)(?!.*\1)/g) // will match on the last instance of `w`
+
+'aaww'.match(/(a|w)(?!.*\1)/g) // will match on the last instance of `a` or `w`
+
+'aaww'.match(/(.)(?!.*\1)/g) // will match on the last instance of any character (backreference)
+
+simplified example of backreference
+// match a character if it is followed by `a` and itself twice.
+'rarr'.match(/(r)a\1{2}/g) // 'rarr'
+
+```
