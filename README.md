@@ -181,7 +181,9 @@ Example: Match grey if it is not followed by ` hound` (must account for space be
 'grey dog'.match(/grey(?! hound)/g) // ['grey']
 
 ```
-### Exercise 6: Find last instance of every character in string.
+### Exercise 6: Backreferences.
+1. #### Find last instance of every character in string
+
 ```
 // use a capture group and reference within regular expression.
 // in order to reference the capture group within a regexp, we'll use '\1'  
